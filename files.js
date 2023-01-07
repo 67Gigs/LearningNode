@@ -38,6 +38,8 @@ const fs = require('fs');
 //     });
 // }
 
+// creating a file
+
 // if (!fs.existsSync('./docs/deleteme.txt')){
 //     fs.writeFile('./docs/deleteme.txt', '', (err)=> {
 //         if (err) {
