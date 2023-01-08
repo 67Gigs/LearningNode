@@ -1,16 +1,34 @@
 // importing the http module
-
 const http = require('http');
-
+// importing files module
 const fs = require('fs');
+// importing lodash module
+const _ = require('lodash');
+
 
 // creating  a server and stocking it into a var
 // we need a request and a response in the argument of the function so it runs
 const server = http.createServer((req, res) => {
     // request object
     // console.log('request made');
-    console.log(req.url, req.method);
+    // console.log(req.url, req.method);
     // repsonse object
+
+    // lodash
+    const num = _.random(0, 20);
+    console.log(num);
+
+
+
+    // call a function once only
+
+    const greet = _.once(() => {
+        console.log('hello');
+    });
+
+    greet();
+    greet();
+    
 
     // set header content type
     res.setHeader('Content-Type', 'text/html');
@@ -32,7 +50,7 @@ const server = http.createServer((req, res) => {
             res.statusCode = 200;
             break;
 
-        case '/about-me':
+        case '/about-us':
             res.statusCode = 301;
             res.setHeader('Location', '/about');
             res.end()
@@ -64,3 +82,7 @@ server.listen(3000, 'localhost', () => {
 });
 
 // to send a request we may use localhost:3000 and a request will pop
+
+
+
+// the package nodemon is used to never close the server we are working on, so it automatically reload the server
