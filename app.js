@@ -2,23 +2,54 @@ const express = require('express');
 const _ = require('lodash');
 const mongoose = require('mongoose');
 var morgan = require('morgan');
+const blogRoutes = require('./routes/blogRoutes')
+
+// express app
+const app = express();
 
 // connect to mongodb
 const dbURI = 'mongodb+srv://noureddine:test1234@cluster0.6u8zbf5.mongodb.net/NodeTuts?retryWrites=true&w=majority';
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then((result) => app.listen(3000))
-    .catch((err) => console.log(err));
-// express app
-const app = express();
+    .then((result) => {
+        app.listen(3000);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 
  // register view engine
 app.set('view engine', 'ejs');
 
+// middlewares
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
+
+// routes
+app.get('/', (req, res) => {
+    res.redirect('/blogs');
+});
+
+app.get('/about', (req, res) => {
+    // res.sendFile('./views/about.html', { root: __dirname });
+    res.render('about', { title: 'About' });
+});
+
+// blog routes
+app.use('/blogs', blogRoutes);
+
+// 404 page
+app.use((req, res) => {
+    res.status(404).render('404', { title: '404' });
+});
+
+// redirects
+// app.get('/about-us', (req, res) => {
+//     res.redirect('/about');
+// });
+
 // listen for request
 // app.listen(3000);
-
-// using morgan
-// app.use(morgan('dev'));
 
 // middleware
 // app.use((req, res, next) => {
@@ -34,41 +65,40 @@ app.set('view engine', 'ejs');
 //     next();
 // });
 
-app.get('/', (req, res) => {
-    // with res.send() we dont need to set a header for res (res.setHeader())
-    // no need for res.write/res.end
-    // it enfers the status code automatically
-    //res.send('<p> home page </p>');
+// mongoose and mongo sandbox routes
 
-    // send files rather than text
-    // res.sendFile('./views/index.html', { root: __dirname });
+// app.get('/add-blog', (req, res) => {
+//     const blog = new Blog({
+//         title: 'new blog',
+//         snippet: 'about my new blog',
+//         body: 'more about my new blog'
+//     });
 
-    // send an ejs file
-    const blogs = [
-        {title: 'Yoshi finds eggs', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-        {title: 'Mario finds stars', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-        {title: 'How to defeat bowser', snippet: 'Lorem ipsum dolor sit amet consectetur'},
-    ]
-    res.render('index', { title: 'Home', blogs});
-});
-
-app.get('/about', (req, res) => {
-    // res.sendFile('./views/about.html', { root: __dirname });
-    res.render('about', { title: 'About' });
-});
-
-
-// redirects
-// app.get('/about-us', (req, res) => {
-//     res.redirect('/about');
+//     blog.save()
+//         .then((result) => {
+//             res.redirect('/');
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//         });
 // });
 
-app.get('/blogs/create', (req, res) => {
-    res.render('create',{ title: 'Create a new blog' });
-});
+// app.get('/all-blogs', (req, res) => {
+//     Blog.find()
+//         .then((result) => {
+//             res.send(result);
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//         })
+// });
 
-// 404 page
-app.use((req, res) => {
-    // res.statusCode(404).sendFile('./views/404.html', { root: '.' });
-    res.status(404).render('404', { title: '404' });
-});
+// app.get('/single-blog', (req, res) => {
+//     Blog.findById('63c97ed4b31d1008e484f1ea')
+//         .then((result) => {
+//             res.send(result);
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//         })
+// });
