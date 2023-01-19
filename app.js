@@ -3,7 +3,7 @@ const _ = require('lodash');
 const mongoose = require('mongoose');
 var morgan = require('morgan');
 const blogRoutes = require('./routes/blogRoutes')
-
+mongoose.set('strictQuery', false);
 // express app
 const app = express();
 
