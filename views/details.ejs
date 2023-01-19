@@ -13,7 +13,10 @@
             <p><%= blog.body %></p>
         </div>
         <a class="delete" data-doc="<%= blog._id %>">delete</a>
+        <a href="/blogs/update/<%= blog._id %>" class="update" data-doc="<%= blog._id %>">update</a>
     </div>
+
+
 
     <%- include('./partials/footer.ejs') %>
 

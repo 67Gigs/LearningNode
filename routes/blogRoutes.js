@@ -1,9 +1,10 @@
 const express = require('express');
+const { findById } = require('../models/blogs');
 const Blog = require('../models/blogs');
 
 const router = express.Router();
 
-router.get('/blogs', (req, res) => {
+router.get('/', (req, res) => {
     // with res.send() we dont need to set a header for res (res.setHeader())
     // no need for res.write/res.end
     // it enfers the status code automatically
@@ -21,6 +22,32 @@ router.get('/blogs', (req, res) => {
             console.log(err);
         });
 
+});
+
+router.get('/update/:id', (req, res) => {
+    const id = req.params.id;
+    Blog.findById(id)
+        .then((result) => {
+            res.render('update', { title: 'Update' ,blogs: result });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+});
+
+router.post('/updated/:id', (req, res) => {
+    const id = req.params.id;
+    const test= { title: req.body.title,
+        snippet: req.body.snippet,
+        body: req.body.body
+    };
+    Blog.findByIdAndUpdate(id, test)
+        .then((result) => {
+            res.redirect('/blogs');
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 });
 
 router.post('/', (req, res) => {
