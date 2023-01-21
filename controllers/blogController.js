@@ -23,11 +23,7 @@ const blog_index = (req, res) => {
 
 const blog_update_post = (req, res) => {
     const id = req.params.id;
-    const blog = { title: req.body.title,
-        snippet: req.body.snippet,
-        body: req.body.body 
-    };
-    Blog.findByIdAndUpdate(id, blog)
+    Blog.findByIdAndUpdate(id, req.body)
         .then((result) => {
             res.redirect('/blogs');
         })

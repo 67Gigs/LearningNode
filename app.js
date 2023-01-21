@@ -8,7 +8,7 @@ mongoose.set('strictQuery', false);
 const app = express();
 
 // connect to mongodb
-const dbURI = <mongodb serv url>;
+const dbURI = 'mongodb+srv://noureddine:test1234@cluster0.6u8zbf5.mongodb.net/NodeTuts?retryWrites=true&w=majority';
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((result) => {
         app.listen(3000);
