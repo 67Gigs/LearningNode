@@ -1,14 +1,15 @@
 const express = require('express');
 const _ = require('lodash');
-const mongoose = require('mongoose');
+const blogRoutes = require('./routes/blogRoutes');
 var morgan = require('morgan');
-const blogRoutes = require('./routes/blogRoutes')
-mongoose.set('strictQuery', false);
+
 // express app
 const app = express();
 
 // connect to mongodb
-const dbURI = 'mongodb+srv://noureddine:test1234@cluster0.6u8zbf5.mongodb.net/NodeTuts?retryWrites=true&w=majority';
+const mongoose = require('mongoose');
+mongoose.set('strictQuery', false);
+const dbURI = 'mongodb+srv://<userName>:<userKey>@cluster0.6u8zbf5.mongodb.net/NodeTuts?retryWrites=true&w=majority';
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((result) => {
         app.listen(3000);
@@ -17,13 +18,13 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
         console.log(err);
     });
 
+// middlewares
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.use(morgan('dev'));
+
  // register view engine
 app.set('view engine', 'ejs');
-
-// middlewares
-app.use(express.static('public'));
-app.use(express.urlencoded({ extended: true }));
-app.use(morgan('dev'));
 
 // routes
 app.get('/', (req, res) => {
